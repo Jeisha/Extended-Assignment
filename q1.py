@@ -61,7 +61,7 @@ class Restaurant(threading.Thread):
                         self.sales += 1
             if self.sales%5 == 0:
                 self.staff += 1
-            time.sleep(10)
+            time.sleep(1)
 
 class Staff(threading.Thread):
     def __init__(self,loc,grid,restaurant):
@@ -161,15 +161,7 @@ class Customer(threading.Thread):
             if self.status == Customer.IS_EATING or Customer.IS_EATING_ENJOYING:
                 time.sleep(random.randint(1,6))
                 self.status = Customer.IS_DONE
-            
-            if self.haveFavFood:
-                self.grid.locks[self.loc[0]][self.loc[1]].acquire()
-                self.grid.addToQueue(self, self.loc[0],self.loc[1])
-                self.grid.remove(self.loc[0],self.loc[1])
-                self.grid.locks[self.loc[0]][self.loc[1]].remove()
-                self.loc = None
-                self.status = Customer.IS_WAITING_IN_QUEUE
-            
+                    
             if self.status == Customer.IS_WAITING_IN_QUEUE:
                 self.waitingTime += 1
             

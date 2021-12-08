@@ -51,16 +51,11 @@ class CheckInServer(threading.Thread):
                 self.Status = CheckInServer.FREE
 
                 if not self.Customer.Passport:
-                    time.sleep(random.randint(0, 3))
                     self.Customer.pos = Passenger.CHECKIN_REJECTED
                     # add to rejected list
                     rejected.Lock.acquire()
                     rejected.put(self.Customer)
                     rejected.Lock.release()
-                    # increasing the number served by the server
-                    self.Q.Lock.acquire()
-                    self.Q.Number += 1
-                    self.Q.Lock.release()
                 else:
                     time.sleep(random.randint(0, 2))
                     self.Customer.pos = Passenger.CHECKIN_DONE
@@ -68,10 +63,10 @@ class CheckInServer(threading.Thread):
                     exit.Lock.acquire()
                     exit.put(self.Customer)
                     exit.Lock.release()
-                    # increasing the number served by the server
-                    self.Q.Lock.acquire()
-                    self.Q.Number += 1
-                    self.Q.Lock.release()
+                # increasing the number served by the server
+                self.Q.Lock.acquire()
+                self.Q.Number += 1
+                self.Q.Lock.release()
             time.sleep(1)
 
     # function to get customer from queue
